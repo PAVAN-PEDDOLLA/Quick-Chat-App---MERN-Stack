@@ -9,7 +9,7 @@ router.post('/signup', async (req, res) => {
         const user = await User.findOne({ email: req.body.email });
         //2. If user exists, send an error response
         if (user) {
-            return res.status(400).json({
+            return res.json({
                 message: "User already exists",
                 status: false
             });
@@ -26,7 +26,7 @@ router.post('/signup', async (req, res) => {
             success: true
         })
     } catch (error) {
-        res.status(400).send({
+        res.send({
             message: error.message,
             success: false
         });
@@ -38,7 +38,7 @@ router.post('/login', async (req, res) => {
         //1. Check if user exists
         const user = await User.findOne({ email: req.body.email });
         if (!user) {
-            return res.status(400).send({
+            return res.send({
                 message: 'User does not exist',
                 success: false
             })
@@ -47,7 +47,7 @@ router.post('/login', async (req, res) => {
         //2. check if the password is correct
         const isvalid = await bcrypt.compare(req.body.password, user.password);
         if (!isvalid) {
-            return res.status(400).send({
+            return res.send({
                 message: 'invalid password',
                 success: false
             })
@@ -63,7 +63,7 @@ router.post('/login', async (req, res) => {
         });
 
     } catch (error) {
-        res.status(400).send({
+        res.send({
             message: error.message,
             success: false
         })
