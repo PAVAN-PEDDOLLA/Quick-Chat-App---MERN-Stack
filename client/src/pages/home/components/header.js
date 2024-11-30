@@ -4,8 +4,8 @@ function Header() {
     const { user } = useSelector(state => state.userReducer);
 
     function getFullname() {
-        let fname = user?.firstname.toUpperCase();
-        let lname = user?.lastname.toUpperCase();
+        let fname = user?.firstname?.at(0).toUpperCase() + user?.firstname?.slice(1).toLowerCase();
+        let lname = user?.lastname.at(0).toUpperCase() + user?.lastname.slice(1).toLowerCase();
         return fname + ' ' + lname;
     }
 
@@ -23,9 +23,9 @@ function Header() {
             </div>
             <div className="app-user-profile">
                 <div className="logged-user-name">
-                    { getFullname() }
+                    {getFullname()}
                 </div>
-                <div className="logged-user-profile-pic">{ getInitials() }</div>
+                <div className="logged-user-profile-pic">{getInitials()}</div>
             </div>
         </div>
     )
