@@ -1,10 +1,11 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
-function Header() {
+function Header({ socket }) {
     const { user } = useSelector(state => state.userReducer);
-
+    const navigate = useNavigate();
     function getFullname() {
-        let fname = user?.firstname?.at(0).toUpperCase() + user?.firstname?.slice(1).toLowerCase();
+        let fname = user?.firstname.at(0).toUpperCase() + user?.firstname.slice(1).toLowerCase();
         let lname = user?.lastname.at(0).toUpperCase() + user?.lastname.slice(1).toLowerCase();
         return fname + ' ' + lname;
     }
@@ -15,6 +16,12 @@ function Header() {
         return f + l;
     }
 
+    const logout = () => {
+        localStorage.removeItem('token');
+        navigate('/login');
+        socket.emit('user-offline', user._id);
+    }
+
     return (
         <div className="app-header">
             <div className="app-logo">
@@ -22,13 +29,16 @@ function Header() {
                 Quick Chat
             </div>
             <div className="app-user-profile">
-                <div className="logged-user-name">
-                    {getFullname()}
-                </div>
-                <div className="logged-user-profile-pic">{getInitials()}</div>
+                {user?.profilePic && <img src={user?.profilePic} alt="profile-pic" className="logged-user-profile-pic" onClick={() => navigate('/profile')}></img>}
+                {!user?.profilePic && <div className="logged-user-profile-pic" onClick={() => navigate('/profile')}>{getInitials()}</div>}
+                <div className="logged-user-name">{getFullname()}</div>
+                <button className="logout-button" onClick={logout}>
+                    <i className="fa fa-power-off"></i>
+                </button>
+
             </div>
         </div>
     )
-};
+}
 
 export default Header;

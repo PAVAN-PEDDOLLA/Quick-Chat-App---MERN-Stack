@@ -1,13 +1,23 @@
 import { useState } from "react";
 import Search from "./search";
-import UserList from "./userList";
+import UsersList from "./userList";
 
-function Sidebar() {
-    const [serachKey, setSearchKey] = useState('');
-    return (<div className="app-sidebar">
-        <Search searchkey={serachKey} setsearchkey={setSearchKey}/>
-        <UserList searchKey={serachKey}/>
-    </div>)
+function Sidebar({ socket, onlineUser }){
+    const [searchKey, setSearchKey] = useState('');
+    return (
+        <div className="app-sidebar">
+            <Search 
+                searchKey={searchKey} 
+                setSearchKey={setSearchKey}>               
+            </Search>
+            <UsersList 
+                searchKey={searchKey} 
+                socket={socket}
+                onlineUser={onlineUser}
+            >
+            </UsersList>
+        </div>
+    )
 }
 
 export default Sidebar;
